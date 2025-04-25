@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UltraNítido - Upscale de Imagens</title>
+    <title>UltraNítido - Upscale de Imagens com ESRGAN</title>
     <style>
         * {
             margin: 0;
@@ -33,7 +33,7 @@
         }
         
         .logo {
-            max-width: 200px;
+            max-width: 350px; /* Ajustado para 350px conforme solicitado */
             height: auto;
             margin: 0 auto 20px auto;
             cursor: pointer;
@@ -238,6 +238,31 @@
             margin-top: 20px;
         }
         
+        .model-loading {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            width: 100%;
+            background: #eee;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #23c46c;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
         @media (max-width: 768px) {
             .preview-area {
                 grid-template-columns: 1fr;
@@ -283,16 +308,16 @@
                 <g>
                     <rect class="cls-1" x="135.91" y="35.05" width="29.3" height="71.72" rx="13.12" ry="13.12" transform="translate(79.66 221.47) rotate(-90)"/>
                     <g>
-                        <path d="M161.45,69.14l3.66-.96c2.02-.53,3.59-2.1,4.12-4.12l.96-3.66.96,3.66c.53,2.02,2.1,3.59,4.12,4.12l3.66.96-3.66.96c-2.02.53-3.59,2.1-4.12,4.12l-.96,3.66-.96-3.66c-.53-2.02-2.1-3.59-4.12-4.12l-3.66-.96Z"/>
-                        <path d="M159.42,76.92l1.74-.46c.96-.25,1.71-1,1.96-1.96l.46-1.74.46,1.74c.25.96,1,1.71,1.96,1.96l1.74.46-1.74.46c-.96.25-1.71,1-1.96,1.96l-.46,1.74-.46-1.74c-.25-.96-1-1.71-1.96-1.96l-1.74-.46Z"/>
-                        <path d="M154.63,72.08l1.21-.32c.67-.17,1.19-.7,1.36-1.36l.32-1.21.32,1.21c.17.67.7,1.19,1.36,1.36l1.21.32-1.21.32c-.67.17-1.19.7-1.36,1.36l-.32,1.21-.32-1.21c-.17-.67-.7-1.19-1.36-1.36l-1.21-.32Z"/>
+                        <path d="M161.45,69.14l3.66-.96c2.02-.53,3.59-2.1,4.12-4.12l.96-3.66.96,3.66c.53,2.02,2.1,3.59,4.12,4.12l3.66.96-3.66,.96c-2.02,.53-3.59,2.1-4.12,4.12l-.96,3.66-.96-3.66c-.53-2.02-2.1-3.59-4.12-4.12l-3.66-.96Z"/>
+                        <path d="M159.42,76.92l1.74-.46c.96-.25,1.71-1,1.96-1.96l.46-1.74.46,1.74c.25.96,1,1.71,1.96,1.96l1.74.46-1.74,.46c-.96,.25-1.71,1-1.96,1.96l-.46,1.74-.46-1.74c-.25-.96-1-1.71-1.96-1.96l-1.74-.46Z"/>
+                        <path d="M154.63,72.08l1.21-.32c.67-.17,1.19-.7,1.36-1.36l.32-1.21.32,1.21c.17.67,.7,1.19,1.36,1.36l1.21,.32-1.21,.32c-.67,.17-1.19,.7-1.36,1.36l-.32,1.21-.32-1.21c-.17-.67-.7-1.19-1.36-1.36l-1.21-.32Z"/>
                     </g>
                     <circle cx="129.54" cy="70.91" r="10.51"/>
                 </g>
             </svg>
         </a>
         <h1>UltraNítido</h1>
-        <p class="subtitle">Aumenta qualidade de suas imagens em até 4X de forma ilimitada e gratuita.</p>
+        <p class="subtitle">Aumenta qualidade de suas imagens para 4K com ESRGAN - Grátis!</p>
     </header>
     
     <div class="container">
@@ -307,6 +332,14 @@
             <span>para comunidade Prompt Certo</span>
         </div>
         
+        <div class="model-loading" id="modelLoading">
+            <h3>Carregando modelo ESRGAN...</h3>
+            <p>Isso pode levar alguns segundos na primeira vez</p>
+            <div class="progress-bar">
+                <div class="progress" id="modelProgress"></div>
+            </div>
+        </div>
+        
         <div class="upload-area" id="dropZone">
             <input type="file" id="fileInput" accept="image/*" style="display: none">
             <h3>Arraste uma imagem aqui</h3>
@@ -316,35 +349,40 @@
         
         <div class="options">
             <div class="option-group">
-                <label>Fator de Escala:</label>
-                <select id="scaleFactor">
-                    <option value="2">2x (Dobrar tamanho)</option>
-                    <option value="3">3x</option>
-                    <option value="4">4x</option>
+                <label>Modelo ESRGAN:</label>
+                <select id="esrganModel">
+                    <option value="2x">2x (Rápido)</option>
+                    <option value="4x" selected>4x (Qualidade 4K)</option>
                 </select>
             </div>
             
             <div class="option-group">
-                <label>Algoritmo:</label>
-                <select id="algorithm">
-                    <option value="smart-sharp">Smart Sharp (Nitidez Inteligente)</option>
-                    <option value="edge-preserve">Edge Preserve (Preserva Detalhes)</option>
+                <label>Aprimoramento HDR:</label>
+                <select id="hdrEnhance">
+                    <option value="low">Baixo</option>
+                    <option value="medium" selected>Médio</option>
+                    <option value="high">Alto</option>
                 </select>
             </div>
             
             <div class="option-group">
-                <label>Nitidez: <span id="sharpnessValue">50%</span></label>
-                <input type="range" id="sharpness" min="0" max="100" value="50">
+                <label>Nitidez: <span id="sharpnessValue">70%</span></label>
+                <input type="range" id="sharpness" min="0" max="100" value="70">
             </div>
             
             <div class="option-group">
-                <label>Brilho: <span id="brightnessValue">0</span></label>
-                <input type="range" id="brightness" min="-50" max="50" value="0">
+                <label>Brilho: <span id="brightnessValue">10</span></label>
+                <input type="range" id="brightness" min="-50" max="50" value="10">
             </div>
             
             <div class="option-group">
-                <label>Contraste: <span id="contrastValue">0</span></label>
-                <input type="range" id="contrast" min="-50" max="50" value="0">
+                <label>Contraste: <span id="contrastValue">15</span></label>
+                <input type="range" id="contrast" min="-50" max="50" value="15">
+            </div>
+            
+            <div class="option-group">
+                <label>Saturação: <span id="saturationValue">15</span></label>
+                <input type="range" id="saturation" min="-50" max="50" value="15">
             </div>
             
             <button class="btn" id="processBtn" disabled>Processar Imagem</button>
@@ -352,7 +390,7 @@
         
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>Processando imagem...</p>
+            <p>Processando imagem em 4K com ESRGAN...</p>
         </div>
         
         <div class="preview-area" id="previewArea" style="display: none;">
@@ -362,14 +400,21 @@
                 <p id="originalInfo"></p>
             </div>
             <div class="preview-box">
-                <h3>Processada</h3>
+                <h3>Processada (Qualidade 4K ESRGAN)</h3>
                 <img id="processedPreview">
                 <p id="processedInfo"></p>
             </div>
         </div>
         
-        <button class="btn" id="downloadBtn">⬇️ Baixar Imagem Processada</button>
+        <button class="btn" id="downloadBtn">⬇️ Baixar Imagem em Qualidade 4K</button>
     </div>
+
+    <!-- Carregar as bibliotecas necessárias -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/upscaler"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-legacy/dist/umd/gans.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-slim/dist/umd/2x.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-slim/dist/umd/4x.min.js"></script>
 
     <script>
         const dropZone = document.getElementById('dropZone');
@@ -378,19 +423,57 @@
         const downloadBtn = document.getElementById('downloadBtn');
         const loading = document.getElementById('loading');
         const previewArea = document.getElementById('previewArea');
+        const modelLoadingDiv = document.getElementById('modelLoading');
+        const modelProgressBar = document.getElementById('modelProgress');
         
         // Sliders
         const sharpnessSlider = document.getElementById('sharpness');
         const brightnessSlider = document.getElementById('brightness');
         const contrastSlider = document.getElementById('contrast');
+        const saturationSlider = document.getElementById('saturation');
         
         // Value displays
         const sharpnessValue = document.getElementById('sharpnessValue');
         const brightnessValue = document.getElementById('brightnessValue');
         const contrastValue = document.getElementById('contrastValue');
+        const saturationValue = document.getElementById('saturationValue');
         
         let originalImage = null;
         let processedImageData = null;
+        let upscaler = null;
+        
+        // Inicializar o upscaler com o modelo ESRGAN
+        async function initUpscaler() {
+            modelLoadingDiv.style.display = 'block';
+            
+            try {
+                // Carregando os progressos do modelo
+                modelProgressBar.style.width = '30%';
+                
+                // Criar o upscaler com o modelo ESRGAN
+                upscaler = new Upscaler({
+                    model: ESRGANSlim4x, // Iniciar com o modelo 4x
+                    progress: (progress) => {
+                        modelProgressBar.style.width = `${30 + progress * 70}%`;
+                    }
+                });
+                
+                await upscaler.load();
+                
+                modelProgressBar.style.width = '100%';
+                setTimeout(() => {
+                    modelLoadingDiv.style.display = 'none';
+                }, 1000);
+                
+                console.log('Modelo ESRGAN carregado com sucesso');
+            } catch (error) {
+                console.error('Erro ao carregar o modelo ESRGAN:', error);
+                alert('Erro ao carregar o modelo ESRGAN. Por favor, recarregue a página e tente novamente.');
+            }
+        }
+        
+        // Inicializar o upscaler quando a página carregar
+        window.addEventListener('load', initUpscaler);
         
         // Update slider values
         sharpnessSlider.addEventListener('input', () => {
@@ -403,6 +486,10 @@
         
         contrastSlider.addEventListener('input', () => {
             contrastValue.textContent = contrastSlider.value;
+        });
+        
+        saturationSlider.addEventListener('input', () => {
+            saturationValue.textContent = saturationSlider.value;
         });
         
         // Drag and drop
@@ -454,199 +541,273 @@
             reader.readAsDataURL(file);
         }
         
-        // Função para aplicar Unsharp Mask
-        function unsharpMask(imageData, radius, amount) {
-            const pixels = imageData.data;
-            const width = imageData.width;
-            const height = imageData.height;
+        // Função para mudar o modelo ESRGAN quando o usuário mudar a seleção
+        document.getElementById('esrganModel').addEventListener('change', async function() {
+            const modelType = this.value;
+            modelLoadingDiv.style.display = 'block';
+            modelProgressBar.style.width = '30%';
             
-            // Criar cópia dos pixels originais
-            const originalPixels = new Uint8ClampedArray(pixels);
-            
-            // Aplicar blur gaussiano
-            const blurredData = gaussianBlur(imageData, radius);
-            const blurredPixels = blurredData.data;
-            
-            // Aplicar unsharp mask
-            for (let i = 0; i < pixels.length; i += 4) {
-                const r = originalPixels[i];
-                const g = originalPixels[i + 1];
-                const b = originalPixels[i + 2];
-                
-                const blurR = blurredPixels[i];
-                const blurG = blurredPixels[i + 1];
-                const blurB = blurredPixels[i + 2];
-                
-                pixels[i] = Math.min(255, Math.max(0, r + amount * (r - blurR)));
-                pixels[i + 1] = Math.min(255, Math.max(0, g + amount * (g - blurG)));
-                pixels[i + 2] = Math.min(255, Math.max(0, b + amount * (b - blurB)));
-            }
-            
-            return imageData;
-        }
-        
-        // Função para blur gaussiano
-        function gaussianBlur(imageData, radius) {
-            const pixels = imageData.data;
-            const width = imageData.width;
-            const height = imageData.height;
-            const result = new ImageData(width, height);
-            const resultPixels = result.data;
-            
-            const rs = Math.ceil(radius * 2.57);
-            for (let y = 0; y < height; y++) {
-                for (let x = 0; x < width; x++) {
-                    let r = 0, g = 0, b = 0, a = 0;
-                    let wsum = 0;
-                    
-                    for (let iy = y - rs; iy < y + rs + 1; iy++) {
-                        for (let ix = x - rs; ix < x + rs + 1; ix++) {
-                            const x1 = Math.min(width - 1, Math.max(0, ix));
-                            const y1 = Math.min(height - 1, Math.max(0, iy));
-                            const dsq = (ix - x) * (ix - x) + (iy - y) * (iy - y);
-                            const weight = Math.exp(-dsq / (2 * radius * radius)) / (Math.PI * 2 * radius * radius);
-                            
-                            const idx = (y1 * width + x1) * 4;
-                            r += pixels[idx] * weight;
-                            g += pixels[idx + 1] * weight;
-                            b += pixels[idx + 2] * weight;
-                            a += pixels[idx + 3] * weight;
-                            wsum += weight;
+            try {
+                // Trocar o modelo baseado na seleção
+                if (modelType === '2x') {
+                    upscaler = new Upscaler({
+                        model: ESRGANSlim2x,
+                        progress: (progress) => {
+                            modelProgressBar.style.width = `${30 + progress * 70}%`;
                         }
-                    }
-                    
-                    const idx = (y * width + x) * 4;
-                    resultPixels[idx] = Math.round(r / wsum);
-                    resultPixels[idx + 1] = Math.round(g / wsum);
-                    resultPixels[idx + 2] = Math.round(b / wsum);
-                    resultPixels[idx + 3] = Math.round(a / wsum);
+                    });
+                } else { // 4x
+                    upscaler = new Upscaler({
+                        model: ESRGANSlim4x,
+                        progress: (progress) => {
+                            modelProgressBar.style.width = `${30 + progress * 70}%`;
+                        }
+                    });
                 }
+                
+                await upscaler.load();
+                
+                modelProgressBar.style.width = '100%';
+                setTimeout(() => {
+                    modelLoadingDiv.style.display = 'none';
+                }, 1000);
+                
+                console.log(`Modelo ESRGAN ${modelType} carregado com sucesso`);
+            } catch (error) {
+                console.error('Erro ao trocar o modelo ESRGAN:', error);
+                alert('Erro ao trocar o modelo ESRGAN. Por favor, tente novamente.');
+                modelLoadingDiv.style.display = 'none';
             }
-            
-            return result;
-        }
+        });
         
-        // Função para detecção de bordas
-        function edgeDetection(imageData) {
-            const pixels = imageData.data;
+        // Função para aplicar efeitos HDR
+        function applyHDREffect(imageData, level) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
             const width = imageData.width;
             const height = imageData.height;
-            const edges = new Uint8ClampedArray(pixels.length);
             
-            // Kernel Sobel
-            const sobelX = [-1, 0, 1, -2, 0, 2, -1, 0, 1];
-            const sobelY = [-1, -2, -1, 0, 0, 0, 1, 2, 1];
+            canvas.width = width;
+            canvas.height = height;
             
-            for (let y = 1; y < height - 1; y++) {
-                for (let x = 1; x < width - 1; x++) {
-                    let pixelX = 0;
-                    let pixelY = 0;
-                    
-                    for (let ky = -1; ky <= 1; ky++) {
-                        for (let kx = -1; kx <= 1; kx++) {
-                            const idx = ((y + ky) * width + (x + kx)) * 4;
-                            const gray = (pixels[idx] + pixels[idx + 1] + pixels[idx + 2]) / 3;
-                            const kernelIdx = (ky + 1) * 3 + (kx + 1);
-                            
-                            pixelX += gray * sobelX[kernelIdx];
-                            pixelY += gray * sobelY[kernelIdx];
-                        }
-                    }
-                    
-                    const magnitude = Math.sqrt(pixelX * pixelX + pixelY * pixelY);
-                    const idx = (y * width + x) * 4;
-                    edges[idx] = edges[idx + 1] = edges[idx + 2] = magnitude;
-                    edges[idx + 3] = 255;
-                }
+            // Colocar a imagem no canvas
+            ctx.putImageData(imageData, 0, 0);
+            
+            // Obter os pixels
+            const data = ctx.getImageData(0, 0, width, height).data;
+            const newImageData = ctx.createImageData(width, height);
+            const newData = newImageData.data;
+            
+            // Fatores de intensidade baseados no nível escolhido
+            let intensity;
+            switch (level) {
+                case 'low': intensity = 0.3; break;
+                case 'high': intensity = 0.9; break;
+                default: intensity = 0.6; // medium
             }
             
-            return edges;
+            // Aplicar o efeito HDR
+            for (let i = 0; i < data.length; i += 4) {
+                // Converter para HSL para manipular saturação e luminância
+                const [r, g, b] = [data[i], data[i + 1], data[i + 2]];
+                const [h, s, l] = rgbToHsl(r, g, b);
+                
+                // Aumentar o contraste em áreas claras e escuras
+                const newL = l < 0.5 
+                    ? l * (1 - intensity * 0.5)  // Escurecer sombras
+                    : l + (1 - l) * intensity;    // Clarear realces
+                    
+                // Aumentar saturação em cores vibrantes
+                const newS = s + (1 - s) * intensity * 0.7;
+                
+                // Converter de volta para RGB
+                const [newR, newG, newB] = hslToRgb(h, newS, newL);
+                
+                // Aplicar os novos valores
+                newData[i] = newR;
+                newData[i + 1] = newG;
+                newData[i + 2] = newB;
+                newData[i + 3] = data[i + 3]; // Manter o alpha
+            }
+            
+            ctx.putImageData(newImageData, 0, 0);
+            return newImageData;
         }
         
-        processBtn.addEventListener('click', () => {
-            if (!originalImage) return;
+        // Conversão de RGB para HSL
+        function rgbToHsl(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
             
-            const scaleFactor = parseInt(document.getElementById('scaleFactor').value);
-            const algorithm = document.getElementById('algorithm').value;
-            const sharpness = parseInt(sharpnessSlider.value);
-            const brightness = parseInt(brightnessSlider.value);
-            const contrast = parseInt(contrastSlider.value);
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            
+            if (max === min) {
+                h = s = 0; // acromático
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                
+                h /= 6;
+            }
+            
+            return [h, s, l];
+        }
+        
+        // Conversão de HSL para RGB
+        function hslToRgb(h, s, l) {
+            let r, g, b;
+            
+            if (s === 0) {
+                r = g = b = l; // acromático
+            } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1/6) return p + (q - p) * 6 * t;
+                    if (t < 1/2) return q;
+                    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                    return p;
+                };
+                
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                
+                r = hue2rgb(p, q, h + 1/3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1/3);
+            }
+            
+            return [r * 255, g * 255, b * 255].map(Math.round);
+        }
+        
+        // Função para aplicar nitidez usando Unsharp Mask
+        function applySharpness(imageData, amount) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = imageData.width;
+            canvas.height = imageData.height;
+            
+            ctx.putImageData(imageData, 0, 0);
+            
+            // Criar uma cópia desfocada da imagem
+            const blurredCanvas = document.createElement('canvas');
+            const blurredCtx = blurredCanvas.getContext('2d');
+            blurredCanvas.width = imageData.width;
+            blurredCanvas.height = imageData.height;
+            
+            blurredCtx.putImageData(imageData, 0, 0);
+            blurredCtx.filter = `blur(2px)`;
+            blurredCtx.drawImage(canvas, 0, 0);
+            
+            // Aplicar o efeito unsharp mask
+            ctx.globalCompositeOperation = 'lighter';
+            ctx.globalAlpha = amount / 100;
+            ctx.drawImage(canvas, 0, 0);
+            ctx.globalAlpha = -amount / 100;
+            ctx.drawImage(blurredCanvas, 0, 0);
+            
+            return ctx.getImageData(0, 0, imageData.width, imageData.height);
+        }
+        
+        // Função para ajustar brilho e contraste
+        function adjustBrightnessContrast(imageData, brightness, contrast, saturation) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = imageData.width;
+            canvas.height = imageData.height;
+            
+            ctx.putImageData(imageData, 0, 0);
+            
+            // Aplicar ajustes
+            ctx.filter = `
+                brightness(${100 + brightness}%) 
+                contrast(${100 + contrast}%) 
+                saturate(${100 + saturation}%)
+            `;
+            
+            ctx.drawImage(canvas, 0, 0);
+            
+            return ctx.getImageData(0, 0, imageData.width, imageData.height);
+        }
+        
+        // Processar a imagem com ESRGAN e aplicar os efeitos
+        processBtn.addEventListener('click', async () => {
+            if (!originalImage || !upscaler) {
+                alert('Por favor, selecione uma imagem e aguarde o carregamento do modelo.');
+                return;
+            }
             
             loading.style.display = 'block';
             processBtn.disabled = true;
             
-            setTimeout(() => {
+            try {
+                // Obter os valores dos controles
+                const hdrLevel = document.getElementById('hdrEnhance').value;
+                const sharpnessLevel = parseInt(sharpnessSlider.value) / 100;
+                const brightnessLevel = parseInt(brightnessSlider.value);
+                const contrastLevel = parseInt(contrastSlider.value);
+                const saturationLevel = parseInt(saturationSlider.value);
+                
+                // Primeiro, aplicar o upscale com ESRGAN
+                const upscaledImage = await upscaler.upscale(originalImage);
+                
+                // Criar um canvas para aplicar os efeitos adicionais
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
+                canvas.width = upscaledImage.width;
+                canvas.height = upscaledImage.height;
                 
-                canvas.width = originalImage.width * scaleFactor;
-                canvas.height = originalImage.height * scaleFactor;
+                // Desenhar a imagem upscaled no canvas
+                ctx.drawImage(upscaledImage, 0, 0);
                 
-                // Configurar qualidade de renderização
-                ctx.imageSmoothingEnabled = true;
-                ctx.imageSmoothingQuality = 'high';
-                
-                // Primeiro, fazer upscale básico
-                ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
-                
-                // Obter dados da imagem
+                // Obter os dados da imagem para processamento
                 let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 
-                // Aplicar algoritmo escolhido
-                if (algorithm === 'smart-sharp') {
-                    // Smart Sharp - Unsharp Mask com detecção inteligente
-                    const radius = scaleFactor * 0.5 + (sharpness / 50);
-                    const amount = sharpness / 50;
-                    imageData = unsharpMask(imageData, radius, amount);
-                } else if (algorithm === 'edge-preserve') {
-                    // Edge Preserve - Preserva bordas e detalhes
-                    const edges = edgeDetection(imageData);
-                    const pixels = imageData.data;
-                    
-                    for (let i = 0; i < pixels.length; i += 4) {
-                        const edgeStrength = edges[i] / 255;
-                        const factor = 1 + (sharpness / 100) * edgeStrength;
-                        
-                        pixels[i] = Math.min(255, Math.max(0, pixels[i] * factor));
-                        pixels[i + 1] = Math.min(255, Math.max(0, pixels[i + 1] * factor));
-                        pixels[i + 2] = Math.min(255, Math.max(0, pixels[i + 2] * factor));
-                    }
+                // Aplicar efeito HDR
+                imageData = applyHDREffect(imageData, hdrLevel);
+                
+                // Aplicar nitidez
+                if (sharpnessLevel > 0) {
+                    imageData = applySharpness(imageData, sharpnessSlider.value);
                 }
                 
-                // Aplicar ajustes de brilho e contraste
-                const pixels = imageData.data;
-                const contrastFactor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+                // Aplicar ajustes de brilho, contraste e saturação
+                imageData = adjustBrightnessContrast(imageData, brightnessLevel, contrastLevel, saturationLevel);
                 
-                for (let i = 0; i < pixels.length; i += 4) {
-                    // Aplicar brilho
-                    pixels[i] = Math.min(255, Math.max(0, pixels[i] + brightness));
-                    pixels[i + 1] = Math.min(255, Math.max(0, pixels[i + 1] + brightness));
-                    pixels[i + 2] = Math.min(255, Math.max(0, pixels[i + 2] + brightness));
-                    
-                    // Aplicar contraste
-                    pixels[i] = Math.min(255, Math.max(0, contrastFactor * (pixels[i] - 128) + 128));
-                    pixels[i + 1] = Math.min(255, Math.max(0, contrastFactor * (pixels[i + 1] - 128) + 128));
-                    pixels[i + 2] = Math.min(255, Math.max(0, contrastFactor * (pixels[i + 2] - 128) + 128));
-                }
-                
+                // Colocar a imagem processada de volta no canvas
                 ctx.putImageData(imageData, 0, 0);
                 
+                // Exibir a imagem processada
                 processedImageData = canvas.toDataURL('image/png');
                 document.getElementById('processedPreview').src = processedImageData;
                 document.getElementById('processedInfo').textContent = 
                     `${canvas.width} x ${canvas.height} pixels`;
                 
+                downloadBtn.style.display = 'inline-block';
+            } catch (error) {
+                console.error('Erro ao processar a imagem:', error);
+                alert('Erro ao processar a imagem. Por favor, tente novamente.');
+            } finally {
                 loading.style.display = 'none';
                 processBtn.disabled = false;
-                downloadBtn.style.display = 'inline-block';
-            }, 100);
+            }
         });
         
+        // Baixar a imagem processada
         downloadBtn.addEventListener('click', () => {
             if (!processedImageData) return;
             
             const link = document.createElement('a');
-            link.download = 'imagem_ultranitido.png';
+            link.download = 'imagem_ultranitido_4k.png';
             link.href = processedImageData;
             link.click();
         });
