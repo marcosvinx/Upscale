@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upscale de Imagens Gratuito</title>
+    <title>UltraNítido - Upscale de Imagens</title>
     <style>
         * {
             margin: 0;
@@ -26,10 +26,31 @@
         
         header {
             text-align: center;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px 0 40px 0;
+            background: linear-gradient(135deg, #23c46c 0%, #1a9552 100%);
             color: white;
             margin-bottom: 30px;
+        }
+        
+        .logo {
+            max-width: 200px;
+            height: auto;
+            margin: 0 auto 20px auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo svg {
+            width: 100%;
+            height: auto;
+        }
+        
+        .logo path, .logo ellipse, .logo rect, .logo circle {
+            fill: white !important;
         }
         
         h1 {
@@ -54,13 +75,13 @@
         }
         
         .upload-area:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
+            border-color: #23c46c;
+            background: #f0fdf4;
         }
         
         .upload-area.dragover {
-            border-color: #667eea;
-            background: #f0f3ff;
+            border-color: #23c46c;
+            background: #e6f9ef;
         }
         
         .options {
@@ -81,7 +102,7 @@
             font-weight: 600;
         }
         
-        select, input[type="number"] {
+        select, input[type="number"], input[type="range"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -89,24 +110,45 @@
             font-size: 16px;
         }
         
+        input[type="range"] {
+            padding: 0;
+            height: 40px;
+        }
+        
+        .slider-value {
+            text-align: right;
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
         .btn {
-            background: #667eea;
+            background: #23c46c;
             color: white;
             border: none;
             padding: 12px 30px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
+            animation: glow 2s infinite;
+        }
+        
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px #23c46c; }
+            50% { box-shadow: 0 0 20px #23c46c; }
+            100% { box-shadow: 0 0 5px #23c46c; }
         }
         
         .btn:hover {
-            background: #5a6fd6;
+            background: #1a9552;
+            transform: translateY(-2px);
         }
         
         .btn:disabled {
             background: #ccc;
             cursor: not-allowed;
+            animation: none;
         }
         
         .preview-area {
@@ -141,7 +183,7 @@
         
         .spinner {
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
+            border-top: 4px solid #23c46c;
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -155,11 +197,40 @@
         }
         
         .info-box {
-            background: #e8f0fe;
+            background: #e0f2e9;
             padding: 15px;
             border-radius: 5px;
             margin-bottom: 20px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #23c46c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-box a {
+            color: #23c46c;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .info-box a:hover {
+            text-decoration: underline;
+        }
+        
+        .instagram-icon {
+            width: 20px;
+            height: 20px;
+            fill: #23c46c;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
         
         #downloadBtn {
@@ -183,18 +254,57 @@
             .upload-area {
                 padding: 20px;
             }
+            
+            .logo {
+                max-width: 150px;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Upscale de Imagens</h1>
-        <p class="subtitle">Aumente a resolução das suas imagens gratuitamente</p>
+        <a href="https://www.instagram.com/marcossvinx/" target="_blank" class="logo">
+            <svg id="Camada_1" data-name="Camada 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 186.42 87.9">
+                <ellipse class="cls-1" cx="67.48" cy="23.59" rx="9.23" ry="10.97"/>
+                <g>
+                    <path d="M6.09,38.21V0h16.86c7.48,0,12.26,5.47,12.26,12.37s-4.78,11.97-12.26,11.97h-8.86v13.87h-8ZM21.68,17.84c4.6,0,6.5-2.36,6.5-5.7,0-3.16-1.9-5.52-6.5-5.52h-7.6v11.22h7.6Z"/>
+                    <path d="M36.99,38.21V9.9h7.02v3.4c2.47-3.8,5.35-4.14,8.4-4.14h.98v7.65c-.69-.12-1.38-.17-2.07-.17-4.6,0-6.85,2.3-6.85,6.85v14.73h-7.48Z"/>
+                    <path d="M53.1,24.05c0-8.98,5.58-14.9,14.56-14.9s14.39,5.87,14.39,14.9-5.58,14.9-14.39,14.9-14.56-6.1-14.56-14.9ZM74.51,24.05c0-5.75-2.3-8.57-6.85-8.57s-6.85,2.82-6.85,8.57,2.3,8.63,6.85,8.63,6.85-2.88,6.85-8.63Z"/>
+                    <path d="M117.95,38.21v-17.15c0-3.4-1.78-5.81-4.43-5.81s-4.78,2.59-4.78,6.04v16.92h-7.48v-17.03c0-4.55-1.21-5.7-4.49-5.7-2.99,0-4.55,1.84-4.55,5.52v17.2h-7.48V9.9h7.02v4.14c1.9-3.74,4.55-4.89,8.29-4.89s5.7,1.21,7.88,4.49c1.55-3.11,4.09-4.49,7.65-4.49,5.7,0,9.67,4.14,9.67,9.44v19.62h-7.31Z"/>
+                    <path d="M128.14,51.61V9.9h7.19l.06,3.45c1.78-2.88,4.43-4.2,7.88-4.2,7.13,0,12.26,5.64,12.26,15.19,0,8.57-4.32,14.62-11.62,14.62-3.51,0-6.27-1.44-8.4-4.43v17.09h-7.37ZM147.93,23.82c0-5.06-2.65-8.57-6.39-8.57s-6.33,3.34-6.33,8.11c0,6.16,2.13,9.21,6.27,9.21,4.37,0,6.44-2.93,6.44-8.75Z"/>
+                    <path d="M174.29,19.56h6.96v8.06c0,5.98-3.45,11.34-11.45,11.34s-11.57-5.29-11.57-11.39V2.24h7.37v7.65h15.65v5.29h-15.65v11.62c0,3.57,1.27,5.64,4.32,5.64s4.37-2.01,4.37-5.52v-7.37Z"/>
+                </g>
+                <g>
+                    <path d="M34.11,72.88c-3.23,9.03-10.35,15.02-19.33,15.02S0,82.21,0,71.56c0-15.38,9.27-26.09,22.38-26.09,9.15,0,14.12,5.68,14.12,13.1,0,.42-.06.84-.06,1.26h-6.4c0-.42.06-.78.06-1.14,0-5.62-3.35-7.66-8.62-7.66-9.63,0-14.9,8.62-14.9,19.81,0,8.26,3.17,11.49,8.98,11.49,6.28,0,10.23-3.59,12.15-9.45h6.4Z"/>
+                    <path d="M42.9,73.3c-.06.6-.06,1.26-.06,1.85,0,5.5,2.39,7.42,6.7,7.42,3.17,0,6.16-1.74,7.48-4.73h6.22c-2.81,6.04-8.14,9.45-14.3,9.45-8.02,0-12.03-4.13-12.03-12.09,0-11.97,7.3-18.91,17.05-18.91,7.24,0,10.95,4.13,10.95,11.73,0,1.62-.18,3.35-.48,5.27h-21.54ZM58.94,69.47c.12-.96.18-1.79.18-2.51,0-4.67-2.57-5.86-6.16-5.86-4.55,0-8.14,2.87-9.51,8.38h15.5Z"/>
+                    <path d="M66.6,86.52l5.21-29.44h5.62l-.96,5.27c3.23-5.03,7.18-6.04,10.77-6.04h1.32l-1.08,6.16c-.66-.12-1.38-.18-2.15-.18-5.8,0-9.09,3.71-10.05,9.09l-2.69,15.14h-5.98Z"/>
+                    <path d="M108.42,67.13h5.56l-1.5,8.38c-1.14,6.22-5.5,11.79-13.64,11.79-7.12,0-9.93-3.95-9.93-9.03,0-.9.12-1.85.3-2.81l4.61-26.33h5.92l-1.38,7.96h17.41l-.78,4.31h-17.41l-2.39,13.52c-.18,1.02-.24,1.85-.24,2.63,0,3.23,1.5,4.55,4.91,4.55,4.01,0,6.4-2.87,7.18-7.12l1.38-7.84Z"/>
+                </g>
+                <g>
+                    <rect class="cls-1" x="135.91" y="35.05" width="29.3" height="71.72" rx="13.12" ry="13.12" transform="translate(79.66 221.47) rotate(-90)"/>
+                    <g>
+                        <path d="M161.45,69.14l3.66-.96c2.02-.53,3.59-2.1,4.12-4.12l.96-3.66.96,3.66c.53,2.02,2.1,3.59,4.12,4.12l3.66.96-3.66.96c-2.02.53-3.59,2.1-4.12,4.12l-.96,3.66-.96-3.66c-.53-2.02-2.1-3.59-4.12-4.12l-3.66-.96Z"/>
+                        <path d="M159.42,76.92l1.74-.46c.96-.25,1.71-1,1.96-1.96l.46-1.74.46,1.74c.25.96,1,1.71,1.96,1.96l1.74.46-1.74.46c-.96.25-1.71,1-1.96,1.96l-.46,1.74-.46-1.74c-.25-.96-1-1.71-1.96-1.96l-1.74-.46Z"/>
+                        <path d="M154.63,72.08l1.21-.32c.67-.17,1.19-.7,1.36-1.36l.32-1.21.32,1.21c.17.67.7,1.19,1.36,1.36l1.21.32-1.21.32c-.67.17-1.19.7-1.36,1.36l-.32,1.21-.32-1.21c-.17-.67-.7-1.19-1.36-1.36l-1.21-.32Z"/>
+                    </g>
+                    <circle cx="129.54" cy="70.91" r="10.51"/>
+                </g>
+            </svg>
+        </a>
+        <h1>UltraNítido</h1>
+        <p class="subtitle">Aumenta qualidade de suas imagens em até 4X de forma ilimitada e gratuita.</p>
     </header>
     
     <div class="container">
         <div class="info-box">
-            <p>💡 Este upscaler funciona 100% no seu navegador. Suas imagens não são enviadas para nenhum servidor.</p>
+            <p>Este é um projeto feito por:</p>
+            <a href="https://www.instagram.com/marcossvinx/" target="_blank">
+                <svg class="instagram-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+                @marcossvinx
+            </a>
+            <span>para comunidade Prompt Certo</span>
         </div>
         
         <div class="upload-area" id="dropZone">
@@ -217,10 +327,24 @@
             <div class="option-group">
                 <label>Algoritmo:</label>
                 <select id="algorithm">
-                    <option value="lanczos">Lanczos (Melhor qualidade)</option>
-                    <option value="bicubic">Bicubic (Bom equilíbrio)</option>
-                    <option value="bilinear">Bilinear (Mais rápido)</option>
+                    <option value="smart-sharp">Smart Sharp (Nitidez Inteligente)</option>
+                    <option value="edge-preserve">Edge Preserve (Preserva Detalhes)</option>
                 </select>
+            </div>
+            
+            <div class="option-group">
+                <label>Nitidez: <span id="sharpnessValue">50%</span></label>
+                <input type="range" id="sharpness" min="0" max="100" value="50">
+            </div>
+            
+            <div class="option-group">
+                <label>Brilho: <span id="brightnessValue">0</span></label>
+                <input type="range" id="brightness" min="-50" max="50" value="0">
+            </div>
+            
+            <div class="option-group">
+                <label>Contraste: <span id="contrastValue">0</span></label>
+                <input type="range" id="contrast" min="-50" max="50" value="0">
             </div>
             
             <button class="btn" id="processBtn" disabled>Processar Imagem</button>
@@ -255,8 +379,31 @@
         const loading = document.getElementById('loading');
         const previewArea = document.getElementById('previewArea');
         
+        // Sliders
+        const sharpnessSlider = document.getElementById('sharpness');
+        const brightnessSlider = document.getElementById('brightness');
+        const contrastSlider = document.getElementById('contrast');
+        
+        // Value displays
+        const sharpnessValue = document.getElementById('sharpnessValue');
+        const brightnessValue = document.getElementById('brightnessValue');
+        const contrastValue = document.getElementById('contrastValue');
+        
         let originalImage = null;
         let processedImageData = null;
+        
+        // Update slider values
+        sharpnessSlider.addEventListener('input', () => {
+            sharpnessValue.textContent = `${sharpnessSlider.value}%`;
+        });
+        
+        brightnessSlider.addEventListener('input', () => {
+            brightnessValue.textContent = brightnessSlider.value;
+        });
+        
+        contrastSlider.addEventListener('input', () => {
+            contrastValue.textContent = contrastSlider.value;
+        });
         
         // Drag and drop
         dropZone.addEventListener('click', () => fileInput.click());
@@ -307,11 +454,123 @@
             reader.readAsDataURL(file);
         }
         
+        // Função para aplicar Unsharp Mask
+        function unsharpMask(imageData, radius, amount) {
+            const pixels = imageData.data;
+            const width = imageData.width;
+            const height = imageData.height;
+            
+            // Criar cópia dos pixels originais
+            const originalPixels = new Uint8ClampedArray(pixels);
+            
+            // Aplicar blur gaussiano
+            const blurredData = gaussianBlur(imageData, radius);
+            const blurredPixels = blurredData.data;
+            
+            // Aplicar unsharp mask
+            for (let i = 0; i < pixels.length; i += 4) {
+                const r = originalPixels[i];
+                const g = originalPixels[i + 1];
+                const b = originalPixels[i + 2];
+                
+                const blurR = blurredPixels[i];
+                const blurG = blurredPixels[i + 1];
+                const blurB = blurredPixels[i + 2];
+                
+                pixels[i] = Math.min(255, Math.max(0, r + amount * (r - blurR)));
+                pixels[i + 1] = Math.min(255, Math.max(0, g + amount * (g - blurG)));
+                pixels[i + 2] = Math.min(255, Math.max(0, b + amount * (b - blurB)));
+            }
+            
+            return imageData;
+        }
+        
+        // Função para blur gaussiano
+        function gaussianBlur(imageData, radius) {
+            const pixels = imageData.data;
+            const width = imageData.width;
+            const height = imageData.height;
+            const result = new ImageData(width, height);
+            const resultPixels = result.data;
+            
+            const rs = Math.ceil(radius * 2.57);
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    let r = 0, g = 0, b = 0, a = 0;
+                    let wsum = 0;
+                    
+                    for (let iy = y - rs; iy < y + rs + 1; iy++) {
+                        for (let ix = x - rs; ix < x + rs + 1; ix++) {
+                            const x1 = Math.min(width - 1, Math.max(0, ix));
+                            const y1 = Math.min(height - 1, Math.max(0, iy));
+                            const dsq = (ix - x) * (ix - x) + (iy - y) * (iy - y);
+                            const weight = Math.exp(-dsq / (2 * radius * radius)) / (Math.PI * 2 * radius * radius);
+                            
+                            const idx = (y1 * width + x1) * 4;
+                            r += pixels[idx] * weight;
+                            g += pixels[idx + 1] * weight;
+                            b += pixels[idx + 2] * weight;
+                            a += pixels[idx + 3] * weight;
+                            wsum += weight;
+                        }
+                    }
+                    
+                    const idx = (y * width + x) * 4;
+                    resultPixels[idx] = Math.round(r / wsum);
+                    resultPixels[idx + 1] = Math.round(g / wsum);
+                    resultPixels[idx + 2] = Math.round(b / wsum);
+                    resultPixels[idx + 3] = Math.round(a / wsum);
+                }
+            }
+            
+            return result;
+        }
+        
+        // Função para detecção de bordas
+        function edgeDetection(imageData) {
+            const pixels = imageData.data;
+            const width = imageData.width;
+            const height = imageData.height;
+            const edges = new Uint8ClampedArray(pixels.length);
+            
+            // Kernel Sobel
+            const sobelX = [-1, 0, 1, -2, 0, 2, -1, 0, 1];
+            const sobelY = [-1, -2, -1, 0, 0, 0, 1, 2, 1];
+            
+            for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    let pixelX = 0;
+                    let pixelY = 0;
+                    
+                    for (let ky = -1; ky <= 1; ky++) {
+                        for (let kx = -1; kx <= 1; kx++) {
+                            const idx = ((y + ky) * width + (x + kx)) * 4;
+                            const gray = (pixels[idx] + pixels[idx + 1] + pixels[idx + 2]) / 3;
+                            const kernelIdx = (ky + 1) * 3 + (kx + 1);
+                            
+                            pixelX += gray * sobelX[kernelIdx];
+                            pixelY += gray * sobelY[kernelIdx];
+                        }
+                    }
+                    
+                    const magnitude = Math.sqrt(pixelX * pixelX + pixelY * pixelY);
+                    const idx = (y * width + x) * 4;
+                    edges[idx] = edges[idx + 1] = edges[idx + 2] = magnitude;
+                    edges[idx + 3] = 255;
+                }
+            }
+            
+            return edges;
+        }
+        
         processBtn.addEventListener('click', () => {
             if (!originalImage) return;
             
             const scaleFactor = parseInt(document.getElementById('scaleFactor').value);
             const algorithm = document.getElementById('algorithm').value;
+            const sharpness = parseInt(sharpnessSlider.value);
+            const brightness = parseInt(brightnessSlider.value);
+            const contrast = parseInt(contrastSlider.value);
             
             loading.style.display = 'block';
             processBtn.disabled = true;
@@ -327,49 +586,50 @@
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
                 
-                // Aplicar algoritmo específico
-                switch(algorithm) {
-                    case 'lanczos':
-                        // Lanczos simplificado
-                        for (let i = 0; i < scaleFactor; i++) {
-                            ctx.drawImage(originalImage, 0, 0, 
-                                originalImage.width * (i + 1) / scaleFactor, 
-                                originalImage.height * (i + 1) / scaleFactor);
-                        }
-                        ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
-                        break;
+                // Primeiro, fazer upscale básico
+                ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+                
+                // Obter dados da imagem
+                let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                
+                // Aplicar algoritmo escolhido
+                if (algorithm === 'smart-sharp') {
+                    // Smart Sharp - Unsharp Mask com detecção inteligente
+                    const radius = scaleFactor * 0.5 + (sharpness / 50);
+                    const amount = sharpness / 50;
+                    imageData = unsharpMask(imageData, radius, amount);
+                } else if (algorithm === 'edge-preserve') {
+                    // Edge Preserve - Preserva bordas e detalhes
+                    const edges = edgeDetection(imageData);
+                    const pixels = imageData.data;
+                    
+                    for (let i = 0; i < pixels.length; i += 4) {
+                        const edgeStrength = edges[i] / 255;
+                        const factor = 1 + (sharpness / 100) * edgeStrength;
                         
-                    case 'bicubic':
-                        // Bicubic
-                        ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
-                        break;
-                        
-                    case 'bilinear':
-                        // Bilinear
-                        ctx.imageSmoothingQuality = 'medium';
-                        ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
-                        break;
+                        pixels[i] = Math.min(255, Math.max(0, pixels[i] * factor));
+                        pixels[i + 1] = Math.min(255, Math.max(0, pixels[i + 1] * factor));
+                        pixels[i + 2] = Math.min(255, Math.max(0, pixels[i + 2] * factor));
+                    }
                 }
                 
-                // Aplicar sharpening suave para melhorar a qualidade
-                if (algorithm === 'lanczos') {
-                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    const data = imageData.data;
-                    const factor = 0.05; // Fator de nitidez mais suave
+                // Aplicar ajustes de brilho e contraste
+                const pixels = imageData.data;
+                const contrastFactor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+                
+                for (let i = 0; i < pixels.length; i += 4) {
+                    // Aplicar brilho
+                    pixels[i] = Math.min(255, Math.max(0, pixels[i] + brightness));
+                    pixels[i + 1] = Math.min(255, Math.max(0, pixels[i + 1] + brightness));
+                    pixels[i + 2] = Math.min(255, Math.max(0, pixels[i + 2] + brightness));
                     
-                    for (let i = 0; i < data.length; i += 4) {
-                        const r = data[i];
-                        const g = data[i + 1];
-                        const b = data[i + 2];
-                        
-                        // Aplicar leve nitidez
-                        data[i] = Math.min(255, Math.max(0, r + (r - 128) * factor));
-                        data[i + 1] = Math.min(255, Math.max(0, g + (g - 128) * factor));
-                        data[i + 2] = Math.min(255, Math.max(0, b + (b - 128) * factor));
-                    }
-                    
-                    ctx.putImageData(imageData, 0, 0);
+                    // Aplicar contraste
+                    pixels[i] = Math.min(255, Math.max(0, contrastFactor * (pixels[i] - 128) + 128));
+                    pixels[i + 1] = Math.min(255, Math.max(0, contrastFactor * (pixels[i + 1] - 128) + 128));
+                    pixels[i + 2] = Math.min(255, Math.max(0, contrastFactor * (pixels[i + 2] - 128) + 128));
                 }
+                
+                ctx.putImageData(imageData, 0, 0);
                 
                 processedImageData = canvas.toDataURL('image/png');
                 document.getElementById('processedPreview').src = processedImageData;
@@ -386,7 +646,7 @@
             if (!processedImageData) return;
             
             const link = document.createElement('a');
-            link.download = 'imagem_upscaled.png';
+            link.download = 'imagem_ultranitido.png';
             link.href = processedImageData;
             link.click();
         });
