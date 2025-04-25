@@ -33,7 +33,7 @@
         }
         
         .logo {
-            max-width: 350px; /* Ajustado para 350px conforme solicitado */
+            max-width: 250px; /* Reduzido para não ficar tão grande */
             height: auto;
             margin: 0 auto 20px auto;
             cursor: pointer;
@@ -410,11 +410,9 @@
     </div>
 
     <!-- Carregar as bibliotecas necessárias -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/upscaler"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-legacy/dist/umd/gans.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-slim/dist/umd/2x.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-slim/dist/umd/4x.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.16.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/upscaler@1.0.0-beta.18/dist/browser/umd/upscaler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-slim@1.0.2/dist/umd/index.min.js"></script>
 
     <script>
         const dropZone = document.getElementById('dropZone');
@@ -452,7 +450,7 @@
                 
                 // Criar o upscaler com o modelo ESRGAN
                 upscaler = new Upscaler({
-                    model: ESRGANSlim4x, // Iniciar com o modelo 4x
+                    model: ESRGANSlim['4x'], // Iniciar com o modelo 4x
                     progress: (progress) => {
                         modelProgressBar.style.width = `${30 + progress * 70}%`;
                     }
@@ -551,14 +549,14 @@
                 // Trocar o modelo baseado na seleção
                 if (modelType === '2x') {
                     upscaler = new Upscaler({
-                        model: ESRGANSlim2x,
+                        model: ESRGANSlim['2x'],
                         progress: (progress) => {
                             modelProgressBar.style.width = `${30 + progress * 70}%`;
                         }
                     });
                 } else { // 4x
                     upscaler = new Upscaler({
-                        model: ESRGANSlim4x,
+                        model: ESRGANSlim['4x'],
                         progress: (progress) => {
                             modelProgressBar.style.width = `${30 + progress * 70}%`;
                         }
